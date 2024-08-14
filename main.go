@@ -2,6 +2,16 @@ package main
 
 import "fmt"
 
+func trueUser(name string, validNames [5]string) {
+	for _, validName := range validNames {
+		if name == validName {
+			fmt.Println("Рады вас приветствовать, " + name + "!")
+			return
+		}
+	}
+	fmt.Println("Пошёл на хуй, " + name)
+}
+
 func main() {
 
 	var validNames [5]string
@@ -15,11 +25,5 @@ func main() {
 	fmt.Print("Введите ваше имя: ") 
 	fmt.Scan(&greeting)
 
-	for _, name := range validNames {
-		if greeting == name {
-			fmt.Println("Рады вас приветствовать, " + greeting + "!")
-			return
-		}
-	}
-	fmt.Println("Пошёл на хуй, " + greeting)
+	trueUser(greeting, validNames)
 }
