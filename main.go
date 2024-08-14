@@ -15,8 +15,8 @@ func main() {
 	fmt.Print("Введите ваше имя: ") 
 	fmt.Scan(&greeting)
 
-	for i := 0; i < len(validNames); i++ {
-		if greeting == validNames[i] {
+	for _, name := range validNames {
+		if greeting == name {
 			fmt.Println("Рады вас приветствовать, " + greeting + "!")
 			return
 		}
