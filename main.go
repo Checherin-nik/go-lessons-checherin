@@ -21,6 +21,17 @@ func main() {
 
 	if trueUser(greeting, validNames) {
 		fmt.Println("Рады вас приветствовать, " + greeting + "!")
+
+		for {
+			fmt.Print("Бесконечно спамьте одним словом, пока не введете exit: ")
+			var command string
+			fmt.Scan(&command)
+
+			if command == "exit" {
+				fmt.Println("Вы закончили " + greeting)
+				break
+			}
+		}
 	} else {
 		fmt.Println("Пошёл на хуй, " + greeting)
 	}
