@@ -28,7 +28,8 @@ func main() {
 			fmt.Scan(&command)
 
 			if command == "exit" {
-				fmt.Println("Вы закончили " + greeting)
+				fmt.Println("Вы закончили, " + greeting)
+				fmt.Println("Список разрешенных имен: ", validNames)
 				break
 			}
 		}
