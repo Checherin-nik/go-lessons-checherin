@@ -1,6 +1,7 @@
 package main
 
-import "fmt"
+import ("fmt"
+		"strings")
 
 func trueUser(name string, validNames []string) bool {
 	for _, validName := range validNames {
@@ -12,7 +13,6 @@ func trueUser(name string, validNames []string) bool {
 }
 
 func main() {
-
 	validNames := []string{"Николай", "Егор", "Иван", "Андрей", "Тормунд"}
 
 	var greeting string
@@ -23,14 +23,26 @@ func main() {
 		fmt.Println("Рады вас приветствовать, " + greeting + "!")
 
 		for {
-			fmt.Print("Бесконечно спамьте одним словом, пока не введете exit: ")
+			fmt.Print("Введите команду: ")
 			var command string
 			fmt.Scan(&command)
 
 			if command == "exit" {
 				fmt.Println("Вы закончили, " + greeting)
-				fmt.Println("Список разрешенных имен: ", validNames)
 				break
+			} else if command == "print" {
+				fmt.Println("Список доступных имён: " + strings.Join(validNames, ", "))
+			} else if command == "add" {
+				fmt.Print("Введите имя, которое хотите добавить: ")
+				var newName string
+				fmt.Scan(&newName)
+
+				if trueUser(newName, validNames) {
+					fmt.Println("Имя уже существует в списке.")
+				} else {
+					validNames = append(validNames, newName)
+					fmt.Println("Имя " + newName + " добавлено в список.")
+				}
 			}
 		}
 	} else {
