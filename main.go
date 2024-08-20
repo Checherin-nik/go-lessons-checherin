@@ -47,6 +47,22 @@ func main() {
 				validNames = append(validNames, newName)
 				fmt.Println("Имя " + newName + " добавлено в список.")
 			}
+		} else if command == "delete" {
+			fmt.Print("Введите имя, которое хотите удалить: ")
+			var nameToDelete string
+			fmt.Scan(&nameToDelete)
+
+			if trueUser(nameToDelete, validNames) {
+				for i, validName := range validNames {
+					if nameToDelete == validName {
+						validNames = append(validNames[:i], validNames[i+1:]...)
+						break
+					}
+				}
+				fmt.Println("Имя " + nameToDelete + " удалено из списка")
+			} else {
+				fmt.Println("Имя не найдено в списке")
+			}
 		}
 	}
 } 
