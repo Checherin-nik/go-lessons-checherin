@@ -2,22 +2,21 @@ package main
 
 import (
 	"testing"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestTrueUser(t *testing.T) {
-	if !trueUser("Николай", []string{"Николай", "Николас", "Николя"}) {
-		t.Errorf("Имя 'Николай' есть в списке, ожидаем успех")
-	}
+	assert := assert.New(t)
 
-	if trueUser("Шайтан", []string{"Дьявол", "Сатана", "Чертила"}) {
-		t.Errorf("Имени 'Шайтан' нет в списке, ожидаем ошибку")
-	}
+	assert.True(trueUser("Николай", []string{"Николай", "Николас", "Николя"}), 
+	"Имя 'Николай' есть в списке, ожидаем успех")
 
-	if trueUser("Игорь", []string{}) {
-		t.Errorf("Список пустой, функция должна вернуть false")
-	}	
+	assert.False(trueUser("Шайтан", []string{"Дьявол", "Сатана", "Чертила"}),
+	"Имени 'Шайтан' нет в списке, ожидаем ошибку")
+	
+	assert.False(trueUser("Игорь", []string{}), 
+	"Список пустой, функция должна вернуть false")
 
-	if trueUser(" ", []string{"Ева", "Ада", "Оля"}) {
-		t.Errorf("Пробел должен возвращать ошибку")
-	}
+	assert.False(trueUser(" ", []string{"Ева", "Ада", "Оля"}),
+	"Пробел должен возвращать ошибку")
 }
