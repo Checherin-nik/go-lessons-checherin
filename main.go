@@ -1,7 +1,9 @@
 package main
 
-import ("fmt"
-		"strings")
+import (
+	"fmt"
+	"strings"
+)
 
 func trueUser(name string, validNames []string) bool {
 	for _, validName := range validNames {
@@ -16,7 +18,7 @@ func main() {
 	validNames := []string{"Николай", "Егор", "Иван", "Андрей", "Тормунд"}
 
 	var greeting string
-	fmt.Print("Введите ваше имя: ") 
+	fmt.Print("Введите ваше имя: ")
 	fmt.Scan(&greeting)
 
 	if !trueUser(greeting, validNames) {
@@ -31,12 +33,15 @@ func main() {
 		var command string
 		fmt.Scan(&command)
 
-		if command == "exit" {
+		switch command {
+		case "exit":
 			fmt.Println("Вы закончили, " + greeting)
-			break
-		} else if command == "print" {
+			return // Используем return для завершения функции и выхода из цикла
+
+		case "print":
 			fmt.Println("Список доступных имён: " + strings.Join(validNames, ", "))
-		} else if command == "add" {
+
+		case "add":
 			fmt.Print("Введите имя, которое хотите добавить: ")
 			var newName string
 			fmt.Scan(&newName)
@@ -47,7 +52,8 @@ func main() {
 				validNames = append(validNames, newName)
 				fmt.Println("Имя " + newName + " добавлено в список.")
 			}
-		} else if command == "delete" {
+
+		case "delete":
 			fmt.Print("Введите имя, которое хотите удалить: ")
 			var nameToDelete string
 			fmt.Scan(&nameToDelete)
@@ -63,6 +69,9 @@ func main() {
 			} else {
 				fmt.Println("Имя не найдено в списке")
 			}
+
+		default:
+			fmt.Println("Неизвестная команда: " + command)
 		}
 	}
-} 
+}
