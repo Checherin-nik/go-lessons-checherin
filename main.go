@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"slices"
 )
 
 func trueUser(name string, validNames []string) bool {
@@ -36,7 +37,7 @@ func main() {
 		switch command {
 		case "exit":
 			fmt.Println("Вы закончили, " + greeting)
-			return // Используем return для завершения функции и выхода из цикла
+			return 
 
 		case "print":
 			fmt.Println("Список доступных имён: " + strings.Join(validNames, ", "))
@@ -61,7 +62,7 @@ func main() {
 			if trueUser(nameToDelete, validNames) {
 				for i, validName := range validNames {
 					if nameToDelete == validName {
-						validNames = append(validNames[:i], validNames[i+1:]...)
+						validNames = slices.Delete(validNames, i, i+1)
 						break
 					}
 				}
