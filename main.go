@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"sort"
 	"strings"
 	"slices"
 )
@@ -17,6 +18,7 @@ func trueUser(name string, validNames []string) bool {
 
 func main() {
 	validNames := []string{"Николай", "Егор", "Иван", "Андрей", "Тормунд"}
+	sort.Strings(validNames)
 
 	var greeting string
 	fmt.Print("Введите ваше имя: ")
@@ -51,6 +53,7 @@ func main() {
 				fmt.Println("Имя уже существует в списке.")
 			} else {
 				validNames = append(validNames, newName)
+				sort.Strings(validNames)
 				fmt.Println("Имя " + newName + " добавлено в список.")
 			}
 
@@ -66,6 +69,7 @@ func main() {
 						break
 					}
 				}
+				sort.Strings(validNames)
 				fmt.Println("Имя " + nameToDelete + " удалено из списка")
 			} else {
 				fmt.Println("Имя не найдено в списке")
