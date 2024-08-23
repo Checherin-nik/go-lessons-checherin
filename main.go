@@ -16,6 +16,27 @@ func trueUser(name string, validNames []string) bool {
 	return false
 }
 
+func deleteName(validNames []string, nameToDelete string) [] string {
+	for i, validName := range validNames {
+		if nameToDelete == validName {
+			validNames = slices.Delete(validNames, i, i+1)
+			break
+		}
+	}
+	sort.Strings(validNames)
+	return validNames
+}
+
+func addName(validNames []string, newName string) [] string {
+	if trueUser(newName, validNames) {
+		return validNames
+	}
+	
+	validNames = append(validNames, newName)
+	sort.Strings(validNames)
+	return validNames
+}
+
 func main() {
 	validNames := []string{"Николай", "Егор", "Иван", "Андрей", "Тормунд"}
 	sort.Strings(validNames)
@@ -52,8 +73,7 @@ func main() {
 			if trueUser(newName, validNames) {
 				fmt.Println("Имя уже существует в списке.")
 			} else {
-				validNames = append(validNames, newName)
-				sort.Strings(validNames)
+				validNames = addName(validNames, newName)
 				fmt.Println("Имя " + newName + " добавлено в список.")
 			}
 
@@ -63,13 +83,7 @@ func main() {
 			fmt.Scan(&nameToDelete)
 
 			if trueUser(nameToDelete, validNames) {
-				for i, validName := range validNames {
-					if nameToDelete == validName {
-						validNames = slices.Delete(validNames, i, i+1)
-						break
-					}
-				}
-				sort.Strings(validNames)
+				validNames = deleteName(validNames, nameToDelete) 
 				fmt.Println("Имя " + nameToDelete + " удалено из списка")
 			} else {
 				fmt.Println("Имя не найдено в списке")
