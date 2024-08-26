@@ -23,7 +23,6 @@ func deleteName(validNames []string, nameToDelete string) [] string {
 			break
 		}
 	}
-	sort.Strings(validNames)
 	return validNames
 }
 
@@ -41,56 +40,65 @@ func main() {
 	validNames := []string{"Николай", "Егор", "Иван", "Андрей", "Тормунд"}
 	sort.Strings(validNames)
 
-	var greeting string
-	fmt.Print("Введите ваше имя: ")
-	fmt.Scan(&greeting)
-
-	if !trueUser(greeting, validNames) {
-		fmt.Println("Пошёл на хуй, " + greeting)
-		return
-	}
-
-	fmt.Println("Рады вас приветствовать, " + greeting + "!")
+	reLogin:
 
 	for {
-		fmt.Print("Введите команду: ")
-		var command string
-		fmt.Scan(&command)
+		var greeting string
+		fmt.Print("Введите ваше имя: ")
+		fmt.Scan(&greeting)
 
-		switch command {
-		case "exit":
-			fmt.Println("Вы закончили, " + greeting)
-			return 
+		if !trueUser(greeting, validNames) {
+			fmt.Println("Пошёл на хуй, " + greeting)
+			return
+		}
 
-		case "print":
-			fmt.Println("Список доступных имён: " + strings.Join(validNames, ", "))
+		fmt.Println("Рады вас приветствовать, " + greeting + "!")
 
-		case "add":
-			fmt.Print("Введите имя, которое хотите добавить: ")
-			var newName string
-			fmt.Scan(&newName)
+		for {
+			fmt.Print("Введите команду: ")
+			var command string
+			fmt.Scan(&command)
 
-			if trueUser(newName, validNames) {
-				fmt.Println("Имя уже существует в списке.")
-			} else {
-				validNames = addName(validNames, newName)
-				fmt.Println("Имя " + newName + " добавлено в список.")
+			switch command {
+
+			case "exit":
+				fmt.Println("Вы закончили, " + greeting)
+				return 
+
+			case "logout":
+				fmt.Println("Вы вышли из системы, " + greeting)
+				goto reLogin
+
+			case "print":
+				fmt.Println("Список доступных имён: " + strings.Join(validNames, ", "))
+
+			case "add":
+				fmt.Print("Введите имя, которое хотите добавить: ")
+				var newName string
+				fmt.Scan(&newName)
+
+				if trueUser(newName, validNames) {
+					fmt.Println("Имя уже существует в списке.")
+				} else {
+					validNames = addName(validNames, newName)
+					fmt.Println("Имя " + newName + " добавлено в список.")
+				}
+
+			case "delete":
+				fmt.Print("Введите имя, которое хотите удалить: ")
+				var nameToDelete string
+				fmt.Scan(&nameToDelete)
+
+				if trueUser(nameToDelete, validNames) {
+					validNames = deleteName(validNames, nameToDelete) 
+					fmt.Println("Имя " + nameToDelete + " удалено из списка")
+				} else {
+					fmt.Println("Имя не найдено в списке")
+				}
+
+			default:
+				fmt.Println("Неизвестная команда: " + command)
 			}
-
-		case "delete":
-			fmt.Print("Введите имя, которое хотите удалить: ")
-			var nameToDelete string
-			fmt.Scan(&nameToDelete)
-
-			if trueUser(nameToDelete, validNames) {
-				validNames = deleteName(validNames, nameToDelete) 
-				fmt.Println("Имя " + nameToDelete + " удалено из списка")
-			} else {
-				fmt.Println("Имя не найдено в списке")
-			}
-
-		default:
-			fmt.Println("Неизвестная команда: " + command)
 		}
 	}
 }
