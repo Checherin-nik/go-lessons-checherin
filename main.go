@@ -2,48 +2,13 @@ package main
 
 import (
 	"fmt"
-	"sort"
 	"strings"
-	"slices"
+	"checherin-lessons-go/users"
 )
 
-func trueUser(name string, validNames []string) bool {
-	for _, validName := range validNames {
-		if name == validName {
-			return true
-		}
-	}
-	return false
-}
-
-func deleteName(validNames []string, nameToDelete string) [] string {
-	for i, validName := range validNames {
-		if nameToDelete == validName {
-			validNames = slices.Delete(validNames, i, i+1)
-			break
-		}
-	}
-	return validNames
-}
-
-func addName(validNames []string, newName string) [] string {
-	if trueUser(newName, validNames) {
-		return validNames
-	}
-	
-	validNames = append(validNames, newName)
-	sort.Strings(validNames)
-	return validNames
-}
-
-func initialize(names []string) []string {
-	sort.Strings(names)
-	return names
-}
-
 func main() {
-	validNames := []string{"Николай", "Егор", "Иван", "Андрей", "Тормунд"}
-	validNames = initialize(validNames)
+	usersList := []string{"Николай", "Егор", "Иван", "Андрей", "Тормунд"}
+	usersList = users.Initialize(usersList)
 
 	reLogin:
 
@@ -52,7 +17,7 @@ func main() {
 		fmt.Print("Введите ваше имя: ")
 		fmt.Scan(&greeting)
 
-		if !trueUser(greeting, validNames) {
+		if !users.TrueUser(greeting, usersList) {
 			fmt.Println("Пошёл на хуй, " + greeting)
 			return
 		}
@@ -75,28 +40,28 @@ func main() {
 				goto reLogin
 
 			case "print":
-				fmt.Println("Список доступных имён: " + strings.Join(validNames, ", "))
+				fmt.Println("Список доступных имён: " + strings.Join(usersList, ", "))
 
 			case "add":
 				fmt.Print("Введите имя, которое хотите добавить: ")
-				var newName string
-				fmt.Scan(&newName)
+				var newUser string
+				fmt.Scan(&newUser)
 
-				if trueUser(newName, validNames) {
+				if users.TrueUser(newUser, usersList) {
 					fmt.Println("Имя уже существует в списке.")
 				} else {
-					validNames = addName(validNames, newName)
-					fmt.Println("Имя " + newName + " добавлено в список.")
+					usersList = users.AddName(usersList, newUser)
+					fmt.Println("Имя " + newUser + " добавлено в список.")
 				}
 
 			case "delete":
 				fmt.Print("Введите имя, которое хотите удалить: ")
-				var nameToDelete string
-				fmt.Scan(&nameToDelete)
+				var userToDelete string
+				fmt.Scan(&userToDelete)
 
-				if trueUser(nameToDelete, validNames) {
-					validNames = deleteName(validNames, nameToDelete) 
-					fmt.Println("Имя " + nameToDelete + " удалено из списка")
+				if users.TrueUser(userToDelete, usersList) {
+					usersList = users.DeleteName(usersList, userToDelete) 
+					fmt.Println("Имя " + userToDelete + " удалено из списка")
 				} else {
 					fmt.Println("Имя не найдено в списке")
 				}
