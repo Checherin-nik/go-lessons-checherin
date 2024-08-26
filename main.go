@@ -36,9 +36,14 @@ func addName(validNames []string, newName string) [] string {
 	return validNames
 }
 
+func initialize(names []string) []string {
+	sort.Strings(names)
+	return names
+}
+
 func main() {
 	validNames := []string{"Николай", "Егор", "Иван", "Андрей", "Тормунд"}
-	sort.Strings(validNames)
+	validNames = initialize(validNames)
 
 	reLogin:
 

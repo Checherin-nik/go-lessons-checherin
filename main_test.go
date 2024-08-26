@@ -62,3 +62,19 @@ func TestAddName(t *testing.T) {
 	expected = []string{"Адам", "Андрей"}
 	assert.Equal(expected, modifiedNames, "Ожидаем отсортированный список после добавления элемента")
 }
+
+func TestInitialize(t *testing.T) {
+	assert := assert.New(t)
+
+	names := []string{"Артем", "Борат", "Вениамин", "Геннадий", "Дерьмодемон"}
+	expected := []string{"Артем", "Борат", "Вениамин", "Геннадий", "Дерьмодемон"}
+	assert.Equal(expected, initialize(names), "Ожидаем тот же, уже отсортированный, список")
+
+	names = []string{"Дерьмодемон", "Геннадий", "Вениамин", "Борат", "Артем"}
+	expected = []string{"Артем", "Борат", "Вениамин", "Геннадий", "Дерьмодемон"}
+	assert.Equal(expected, initialize(names), "Ожидаем отсоритрованный список")
+
+	names = []string{"Damodred", "Ieremia", "Velzevul", "Gakadarion", "Abaddon"}
+	expected = []string{"Abaddon", "Damodred", "Gakadarion", "Ieremia", "Velzevul"}
+	assert.Equal(expected, initialize(names), "Ожидаем, что латиница тоже сортируется")
+}
