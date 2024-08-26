@@ -6,12 +6,7 @@ import (
 )
 
 func TrueUser(name string, validNames []string) bool {
-	for _, validName := range validNames {
-		if name == validName {
-			return true
-		}
-	}
-	return false
+	return slices.Contains(validNames, name)
 }
 
 func DeleteName(validNames []string, nameToDelete string) [] string {
