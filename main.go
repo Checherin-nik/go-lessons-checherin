@@ -1,16 +1,33 @@
 package main
 
 import (
+	"bufio"
+	"os"
 	"fmt"
 	"strings"
 	"checherin-lessons-go/users"
 )
 
 func main() {
-	usersList := []string{"Николай", "Егор", "Иван", "Андрей", "Тормунд"}
+	var usersList []string
+
+	if _, err := os.Stat("list.txt"); err == nil {
+		file, _ := os.Open("list.txt")
+		defer file.Close()
+
+		scanner := bufio.NewScanner(file)
+		for scanner.Scan() {
+			usersList = append(usersList, scanner.Text())
+		}
+
+		fmt.Println("Список загружен из файла list.txt")
+	} else {
+		usersList = []string{"Николай", "Егор", "Иван", "Андрей", "Тормунд"}
+	}
+
 	usersList = users.Initialize(usersList)
 
-	reLogin:
+reLogin:
 
 	for {
 		var greeting string
@@ -65,6 +82,15 @@ func main() {
 				} else {
 					fmt.Println("Имя не найдено в списке")
 				}
+
+			case "save":
+				file, _ := os.Create("list.txt")
+				defer file.Close()
+
+				for _, user := range usersList {
+					file.WriteString(user + "\n")
+					}
+				fmt.Println("Список успешно сохранен в файл list.txt")
 
 			default:
 				fmt.Println("Неизвестная команда: " + command)
