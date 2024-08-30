@@ -1,56 +1,17 @@
 package main
 
 import (
-	"bufio"
-	"os"
 	"fmt"
 	"strings"
 	"checherin-lessons-go/users"
+	"checherin-lessons-go/listUsers"
 )
-
-func load(filename string) ([]string, error) {
-	var usersList []string
-
-	file, err := os.Open(filename)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		usersList = append(usersList, scanner.Text())
-	}
-
-	if err := scanner.Err(); err != nil {
-		return nil, err
-	}
-
-	fmt.Println("Список загружен из файла", filename)
-	return usersList, nil
-}
-
-func save(filename string, usersList []string) error {
-	file, err := os.Create(filename)
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	for _, user := range usersList {
-		_, err := file.WriteString(user + "\n")
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
 
 func main() {
 	var usersList []string
 	var err error
 
-	usersList, err = load("list.txt")
+	usersList, err = listUsers.Load("list.txt")
 	if err != nil {
 		fmt.Println("Ошибка при загрузке списка", err)
 		usersList = []string{"Николай", "Егор", "Иван", "Андрей", "Тормунд"}
@@ -115,7 +76,7 @@ reLogin:
 				}
 
 			case "save":
-				err := save("list.txt", usersList)
+				err := listUsers.Save("list.txt", usersList)
 				if err != nil {
 					fmt.Println("Ошибка при создании файла:", err)
 					return
