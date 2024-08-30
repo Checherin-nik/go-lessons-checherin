@@ -84,12 +84,20 @@ reLogin:
 				}
 
 			case "save":
-				file, _ := os.Create("list.txt")
+				file, err := os.Create("list.txt")
+				if err != nil {
+					fmt.Println("Ошибка при создании файла:", err)
+					return
+				}
 				defer file.Close()
-
+			
 				for _, user := range usersList {
-					file.WriteString(user + "\n")
+					_, err := file.WriteString(user + "\n")
+					if err != nil {
+						fmt.Println("Ошибка при записи в файл:", err)
+						return
 					}
+				}
 				fmt.Println("Список успешно сохранен в файл list.txt")
 
 			default:
