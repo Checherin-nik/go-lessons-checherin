@@ -6,38 +6,42 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestLoad(t *testing.T) {
+func TestLoadAndSave(t *testing.T) {
 	assert := assert.New(t)
 
-	t.Run("Успешная загрузка файла", func(t *testing.T) {
-		filename := "testfile.txt"
-		content := "Николай\nМихаил\nГавриил\nУриил"
-		err := os.WriteFile(filename, []byte(content), 0644)
-		assert.NoError(err, "Файл успешно создается")
+	t.Run("Успешное сохранение и загрузка файла", func(t *testing.T) {
+		tempFile, err := os.CreateTemp("", "testfile*.txt")
+		assert.NoError(err, "Временный файл должен быть создан без ошибок")
+		defer os.Remove(tempFile.Name())
 
-		defer os.Remove(filename)
+		usersList := []string{"Николай", "Михаил", "Гавриил", "Уриил"}
 
-		users, err := Load(filename)
-		expected := []string{"Николай", "Михаил", "Гавриил", "Уриил"}
+		err = Save(tempFile.Name(), usersList)
+		assert.NoError(err, "Сохранение прошло без ошибок")
+
+		loadeUsers, err := Load(tempFile.Name())
 		assert.NoError(err, "Загрузка файла прошла без ошибок")
-		assert.Equal(expected, users, "Содержимое файла соответствует ожидаемому")
+		assert.Equal(usersList, loadeUsers, "Содержимое файла после загрузки соответствует сохраненному списку")
 	})
 
-	t.Run("Файл не найден", func(t *testing.T) {
-		users, err := Load("nonexistent.txt")
-		assert.Nil(users, "Список должен быть nil при ошибке")
+	t.Run("Файл не найден при загрузке", func(t *testing.T) {
+		loadeUsers, err := Load("nonexsistent.txt")
+		assert.Nil(loadeUsers, "Список должен быть nil при ошибке")
 		assert.Error(err, "Должна возвращаться ошибка при отсутствии файла")
 	})
 
-	t.Run("Пустой файл", func(t *testing.T) {
-		filename := "emptyfile.txt"
-		err := os.WriteFile(filename, []byte(""), 0644)
-		assert.NoError(err, "Пустой файл должен успешно создаться")
+	t.Run("Загрузка и сохранение пустого файла", func(t *testing.T) {
+		tempFile, err := os.CreateTemp("", "emptyfile*.txt")
+		assert.NoError(err, "Временный файл должен быть создан без ошибок")
+		defer os.Remove(tempFile.Name())
 
-		defer os.Remove(filename)
+		emptyList := []string{}
 
-		users, err := Load(filename)
+		err = Save(tempFile.Name(), emptyList)
+		assert.NoError(err, "Сохранение пустого файла должно пройти без ошибок")
+
+		loadeUsers, err := Load(tempFile.Name())
 		assert.NoError(err, "Загрузка пустого файла должна пройти без ошибок")
-		assert.Empty(users, "Список должен быть пустым для пустого файла")
+		assert.Empty(loadeUsers, "Список должен быть пустым для пустого файла")
 	})
 }
