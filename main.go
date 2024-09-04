@@ -81,7 +81,6 @@ reLogin:
 				err := listUsers.Save("list.txt", usersList)
 				if err != nil {
 					fmt.Println("Ошибка при создании файла:", err)
-					return
 				} else {
 					fmt.Println("Список успешно сохранен в файл list.txt")
 				}
