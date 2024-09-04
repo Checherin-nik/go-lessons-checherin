@@ -56,10 +56,11 @@ reLogin:
 				var newUser string
 				fmt.Scan(&newUser)
 
-				if users.TrueUser(newUser, usersList) {
-					fmt.Println("Имя уже существует в списке.")
+				var addErr error
+				usersList, addErr = users.AddName(usersList, newUser)
+				if addErr != nil {
+					fmt.Println("Ошибка при добавлении имени", addErr)
 				} else {
-					usersList = users.AddName(usersList, newUser)
 					fmt.Println("Имя " + newUser + " добавлено в список.")
 				}
 
@@ -68,11 +69,12 @@ reLogin:
 				var userToDelete string
 				fmt.Scan(&userToDelete)
 
-				if users.TrueUser(userToDelete, usersList) {
-					usersList = users.DeleteName(usersList, userToDelete) 
-					fmt.Println("Имя " + userToDelete + " удалено из списка")
+				var deleteErr error
+				usersList, deleteErr = users.DeleteName(usersList, userToDelete)
+				if deleteErr != nil {
+					fmt.Println("Ошибка при удалении имени:", deleteErr)
 				} else {
-					fmt.Println("Имя не найдено в списке")
+					fmt.Println("Имя " + userToDelete + " удалено из списка.")
 				}
 
 			case "save":
