@@ -26,18 +26,22 @@ func TestDeleteName(t *testing.T) {
 
 	names := []string{"Адам", "Бен", "Веном", "Гавриил", "Дебошир"}
 	
-	modifiedNames := DeleteName(append([]string(nil), names...), "Адам")
+	modifiedNames, err := DeleteName(append([]string(nil), names...), "Адам")
 	expected := []string{"Бен", "Веном", "Гавриил", "Дебошир"}
+	assert.NoError(err, "Ожидаем, что ошибки не будет при удалении существующего имени")
 	assert.Equal(expected, modifiedNames, "Имя 'Адам' есть в списке, ожидаем удаление")
 
-	modifiedNames = DeleteName(append([]string(nil), names...), "Михаил")
+	modifiedNames, err = DeleteName(append([]string(nil), names...), "Михаил")
+	assert.ErrorIs(err, ErrNotFound, "Ожидаем ошибку ErrNotFound при удалении несуществующего имени")
 	assert.Equal(names, modifiedNames, "Имени 'Михаил' нет в списке, ожидаем, что ничего не изменится")
 
-	modifiedNames = DeleteName(append([]string(nil), names...), "Веном")
+	modifiedNames, err = DeleteName(append([]string(nil), names...), "Веном")
 	expected = []string{"Адам", "Бен", "Гавриил", "Дебошир"}
+	assert.NoError(err, "Ожидаем, что ошибки не будет при удалении существующего имени")
 	assert.Equal(expected, modifiedNames, "Удаляем имя из середины списка, ожидаем сохранение сортировки")
 
-	modifiedNames = DeleteName([]string{"Андрей"}, "Андрей")
+	modifiedNames, err = DeleteName([]string{"Андрей"}, "Андрей")
+	assert.NoError(err, "Ожидаем, что ошибки не будет при удалении существующего имени")
 	assert.Empty(modifiedNames, "Ожидаем пустой список после удаления последнего имени")
 }
 
@@ -47,19 +51,23 @@ func TestAddName(t *testing.T) {
 
 	names := []string{"Адам", "Бен", "Веном", "Гавриил", "Дебошир"}
 
-	modifiedNames := AddName(names, "Андрей")
+	modifiedNames, err := AddName(names, "Андрей")
 	expected := []string{"Адам", "Андрей", "Бен", "Веном", "Гавриил", "Дебошир"}
+	assert.NoError(err, "Ожидаем, что ошибки не будет при добавлении нового имени")
 	assert.Equal(expected, modifiedNames, "Имени 'Андрей' нет в списке, ожидаем добавления имени в список")
 
-	modifiedNames = AddName(names, "Дебошир")
+	modifiedNames, err = AddName(names, "Дебошир")
+	assert.ErrorIs(err, ErrAlreadyExist, "Ожидаем ошибку ErrAlreadyExist при удалении несуществующего имени")
 	assert.Equal(names, modifiedNames, "Имени 'Дебошир' нет в списке, ожидаем что список не должен измениться")
 
-	modifiedNames = AddName([]string{}, "Андрей")
+	modifiedNames, err = AddName([]string{}, "Андрей")
 	expected = []string{"Андрей"}
+	assert.NoError(err, "Ожидаем, что ошибки не будет при добавлении в пустой список")
 	assert.Equal(expected, modifiedNames, "Ожидаем список из одного имени после добавления в пусто список")
 
-	modifiedNames = AddName([]string{"Адам"}, "Андрей")
+	modifiedNames, err = AddName([]string{"Адам"}, "Андрей")
 	expected = []string{"Адам", "Андрей"}
+	assert.NoError(err, "Ожидаем, что ошибки не будет при добавлении нового имени")
 	assert.Equal(expected, modifiedNames, "Ожидаем отсортированный список после добавления элемента")
 }
 
