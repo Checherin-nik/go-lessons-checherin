@@ -7,11 +7,13 @@ import (
 	"checherin-lessons-go/listUsers"
 )
 
+const filename = "list.txt"
+
 func main() {
 	var usersList []string
 	var err error
 
-	usersList, err = listUsers.Load("list.txt")
+	usersList, err = listUsers.Load(filename)
 	if err != nil {
 		fmt.Println("Ошибка при загрузке списка", err)
 		usersList = []string{"Николай", "Егор", "Иван", "Андрей", "Тормунд"}
@@ -78,11 +80,11 @@ reLogin:
 				}
 
 			case "save":
-				err := listUsers.Save("list.txt", usersList)
+				err := listUsers.Save(filename, usersList)
 				if err != nil {
 					fmt.Println("Ошибка при создании файла:", err)
 				} else {
-					fmt.Println("Список успешно сохранен в файл list.txt")
+					fmt.Println("Список успешно сохранен в файл " + filename)
 				}
 				
 			default:
