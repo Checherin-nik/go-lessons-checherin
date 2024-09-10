@@ -19,7 +19,8 @@ func main() {
 		usersList = []string{"Николай", "Егор", "Иван", "Андрей", "Тормунд"}
 	}
 
-	usersList = users.Initialize(usersList)
+	names := &users.Names{}
+	names.Initialize(usersList)
 
 reLogin:
 
@@ -28,7 +29,7 @@ reLogin:
 		fmt.Print("Введите ваше имя: ")
 		fmt.Scan(&greeting)
 
-		if !users.TrueUser(greeting, usersList) {
+		if !names.TrueUser(greeting) {
 			fmt.Println("Пошёл на хуй, " + greeting)
 			return
 		}
@@ -58,10 +59,9 @@ reLogin:
 				var newUser string
 				fmt.Scan(&newUser)
 
-				var addErr error
-				usersList, addErr = users.AddName(usersList, newUser)
-				if addErr != nil {
-					fmt.Println("Ошибка при добавлении имени", addErr)
+				err := names.Add(newUser)
+				if err != nil {
+					fmt.Println("Ошибка при добавлении имени", err)
 				} else {
 					fmt.Println("Имя " + newUser + " добавлено в список.")
 				}
@@ -71,10 +71,9 @@ reLogin:
 				var userToDelete string
 				fmt.Scan(&userToDelete)
 
-				var deleteErr error
-				usersList, deleteErr = users.DeleteName(usersList, userToDelete)
-				if deleteErr != nil {
-					fmt.Println("Ошибка при удалении имени:", deleteErr)
+				err := names.Delete(userToDelete)
+				if err != nil {
+					fmt.Println("Ошибка при удалении имени:", err)
 				} else {
 					fmt.Println("Имя " + userToDelete + " удалено из списка.")
 				}

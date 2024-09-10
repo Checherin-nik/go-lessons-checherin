@@ -11,31 +11,39 @@ var (
 	ErrAlreadyExist = errors.New("ErrAlreadyExist")
 )
 
-func TrueUser(name string, validNames []string) bool {
-	return slices.Contains(validNames, name)
+type Names struct {
+	validNames []string
 }
 
-func DeleteName(validNames []string, nameToDelete string) ([]string, error) {
-	for i, validName := range validNames {
-		if nameToDelete == validName {
-			validNames = slices.Delete(validNames, i, i+1)
-			return validNames, nil
+func (n *Names) TrueUser(name string) bool {
+	return slices.Contains(n.validNames, name)
+}
+
+func (n *Names) Delete(name string) error {
+	for i, validName := range n.validNames {
+		if name == validName {
+			n.validNames = slices.Delete(n.validNames, i, i+1)
+			return nil
 		}
 	}
-	return validNames, ErrNotFound
+	return ErrNotFound
 }
 
-func AddName(validNames []string, newName string) ([]string, error) {
-	if TrueUser(newName, validNames) {
-		return validNames, ErrAlreadyExist
+func (n *Names) Add(name string) error {
+	if n.TrueUser(name) {
+		return ErrAlreadyExist
 	}
 	
-	validNames = append(validNames, newName)
-	sort.Strings(validNames)
-	return validNames, nil
+	n.validNames = append(n.validNames, name)
+	sort.Strings(n.validNames)
+	return nil
 }
 
-func Initialize(names []string) []string {
-	sort.Strings(names)
-	return names
+func (n *Names) Initialize(names []string) {
+	n.validNames = names
+	sort.Strings(n.validNames)
+}
+
+func (n *Names) GetValidNames() []string {
+	return n.validNames
 }
